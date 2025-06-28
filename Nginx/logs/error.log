@@ -1,0 +1,37 @@
+2025/06/13 09:34:26 [error] 75120#73624: *1 CreateFile() "D:\Nginx/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2025/06/13 09:36:13 [notice] 68724#25200: signal process started
+2025/06/13 09:36:28 [notice] 61952#19564: signal process started
+2025/06/13 09:36:36 [error] 75916#65448: *4 CreateFile() "D:\Nginx/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
+2025/06/13 09:48:28 [notice] 76460#35528: signal process started
+2025/06/13 09:59:16 [notice] 75728#81764: signal process started
+2025/06/13 10:10:17 [notice] 66420#62924: signal process started
+2025/06/13 10:29:12 [error] 23224#82092: *37 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/users HTTP/1.1", upstream: "http://[::1]:3000/api/users", host: "localhost"
+2025/06/13 10:29:14 [error] 23224#82092: *37 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/users HTTP/1.1", upstream: "http://127.0.0.1:3000/api/users", host: "localhost"
+2025/06/13 10:35:03 [error] 23224#82092: *46 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/users HTTP/1.1", upstream: "http://127.0.0.1:3000/api/users", host: "localhost"
+2025/06/13 10:35:05 [error] 23224#82092: *46 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/users HTTP/1.1", upstream: "http://[::1]:3000/api/users", host: "localhost"
+2025/06/18 16:10:49 [notice] 102180#83356: signal process started
+2025/06/18 16:14:32 [notice] 103256#66508: signal process started
+2025/06/18 16:14:34 [notice] 90544#39820: signal process started
+2025/06/18 16:14:34 [error] 90544#39820: CreateFile() "D:\Nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/06/18 20:08:46 [emerg] 11548#20232: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:18:12 [emerg] 10588#19564: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:22:24 [emerg] 18484#10508: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:25:14 [notice] 20912#19312: signal process started
+2025/06/18 20:25:14 [error] 20912#19312: CreateFile() "D:\ITStep\IT_STEP3\React_Native\Project\Nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/06/18 20:25:50 [emerg] 21404#18196: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:27:12 [emerg] 21164#21192: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:28:10 [emerg] 21192#21164: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:28:35 [emerg] 14124#11812: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:28:41 [emerg] 18552#20356: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:29:35 [emerg] 8884#21216: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:33:50 [emerg] 20128#16808: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:34:27 [emerg] 8152#11068: bind() to 0.0.0.0:80 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2025/06/18 20:47:32 [notice] 19084#21212: signal process started
+2025/06/18 20:47:34 [notice] 18680#10552: signal process started
+2025/06/18 20:47:34 [error] 18680#10552: CreateFile() "D:\ITStep\IT_STEP3\React_Native\Project\Nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/06/18 20:47:43 [notice] 16428#17292: signal process started
+2025/06/25 21:41:19 [notice] 1380#10464: signal process started
+2025/06/25 21:41:21 [notice] 23104#1488: signal process started
+2025/06/25 21:41:21 [error] 23104#1488: CreateFile() "D:\ITStep\IT_STEP3\React_Native\Project\Nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/06/28 14:55:30 [notice] 18820#6032: signal process started
+2025/06/28 14:55:32 [notice] 19212#10756: signal process started
