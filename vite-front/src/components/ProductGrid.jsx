@@ -14,8 +14,17 @@ const ProductGrid = ({ products, onAddToCart }) => {
               <img
                 alt={product.name}
                 src={product.image || 'https://via.placeholder.com/240x160?text=No+Image'}
-                style={{ height: 160, objectFit: 'cover' }}
+                style={{
+                  height: 160,
+                  width: '100%',
+                  objectFit: 'contain',
+                  backgroundColor: '#fff',
+                  transition: 'transform 0.8s ease' // анимация картинки
+                }}
+                className="product-image"
               />
+
+
             }
             actions={[
               <Button type="primary" onClick={() => onAddToCart(product)}>

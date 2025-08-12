@@ -1,17 +1,24 @@
+// src/hooks/useAuth.js
 import { useState } from 'react';
 
 export const useAuth = () => {
-  const [user, setUser] = useState(localStorage.getItem('user') || '');
+  // храним username и token
+  const [user, setUser] = useState(localStorage.getItem('user') || null);
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
 
-  const login = (username) => {
+  const login = (username, tokenValue) => {
     setUser(username);
+    setToken(tokenValue);
     localStorage.setItem('user', username);
+    localStorage.setItem('token', tokenValue);
   };
 
   const logout = () => {
-    setUser('');
+    setUser(null);
+    setToken(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
-  return { user, login, logout };
+  return { user, token, login, logout };
 };

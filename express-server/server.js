@@ -120,104 +120,39 @@
 // });
 
 
-const express = require("express");
-const cors = require("cors");
-const app = express();
-const productRoutes = require("./routes/products");
+// express-server/server.js
+const express = require('express');
+const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/products", productRoutes);
+// подключаем db (используем модуль db.js)
+const db = require('./db');
 
+// подключаем роуты (до listen)
+const productRoutes = require('./routes/products'); // если есть
+const authRoutes = require('./routes/auth');
 
-//-----------------------------------------------
-//1
-const db = new sqlite3.Database('./mydatabase.db', (err) => {
-  if (err) {
-    console.error('Ошибка подключения к базе данных:', err.message);
-  } else {
-    console.log('Подключено к базе данных SQLite');
-  }
-});
-//2
+app.use('/api/products', productRoutes); // если есть
+app.use('/api/auth', authRoutes);
+
+// другие маршруты (countries и т.д.) — убедись, что db определено (в db.js уже)
 app.get('/api/countries', (req, res) => {
   db.all('SELECT * FROM Country', [], (err, rows) => {
     if (err) {
       console.error('Ошибка при запросе:', err.message);
-      res.status(500).json({ error: err.message });
-    } else {
-      res.json(rows);
-    }
-  });
-});
-//3
-app.post("/api/countries", (req, res) => {
-  const { name } = req.body;
-
-  if (!name) {
-    return res.status(400).json({ error: "Поле 'name' обязательно" });
-  }
-
-  const checkSql = 'SELECT * FROM Country WHERE LOWER(name) = LOWER(?)';
-  db.get(checkSql, [name], (err, row) => {
-    if (err) {
-      console.error("Ошибка при проверке:", err.message);
       return res.status(500).json({ error: err.message });
     }
-
-    if (row) {
-      return res.status(409).json({ error: `Страна "${row.name}" уже существует` });
-    }
-
-    const insertSql = 'INSERT INTO Country (name) VALUES (?)';
-    db.run(insertSql, [name], function (err) {
-      if (err) {
-        console.error("Ошибка при добавлении:", err.message);
-        return res.status(500).json({ error: err.message });
-      }
-
-      res.status(201).json({
-        id: this.lastID,
-        name,
-      });
-    });
+    res.json(rows);
   });
 });
 
-
-//4
-app.get('/api/countries/:id', (req, res) => {
-  const id = req.params.id;
-  db.all('SELECT * FROM Country WHERE id = ?', [id], (err, rows) => {
-    if (err) {
-      console.error('Ошибка при запросе:', err.message);
-      res.status(500).json({ error: err.message });
-    } else {
-      res.json(rows);
-    }
-  });
+// Прослушка
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
-
-//5
-app.delete('/api/countries/:id', (req, res) => {
-  const { id } = req.params;
-  const deleteSql = 'DELETE FROM Country WHERE id = ?';
-  db.run(deleteSql, [id], function (err) {
-    if (err) {
-      console.error("Ошибка при удалении:", err.message);
-      return res.status(500).json({ error: err.message });
-    }
-    if (this.changes === 0) {
-      return res.status(404).json({ error: "Страна с таким ID не найдена" });
-    }
-    res.json({ message: "Страна удалена", id });
-  });
-});
-
-//--------------------------------------------------
-app.listen(3001, () => {
-  console.log("Сервер запущен на http://localhost:3001");
-});
-const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);

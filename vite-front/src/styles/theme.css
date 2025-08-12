@@ -36,16 +36,32 @@
 .ant-card {
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 39, 102, 0.1);
 }
 
 .ant-card:hover {
-  box-shadow: 0 6px 20px rgba(0, 39, 102, 0.15);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 39, 102, 0.2);
 }
 
-.ant-card-cover img {
-  border-bottom: 1px solid #f0f0f0;
+.image-container {
+  height: 200px; /* одинаковая высота для всех картинок */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* чтобы показывать полное изображение */
+  transition: transform 0.4s ease;
+}
+
+.ant-card:hover .product-image {
+  transform: scale(1.05);
 }
 
 .ant-card-meta-title {

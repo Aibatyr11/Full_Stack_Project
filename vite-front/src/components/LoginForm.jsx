@@ -1,29 +1,49 @@
+// src/components/LoginForm.jsx
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
-import { login } from '../api';
+import { Form, Input, Button, message } from 'antd';
 
 const LoginForm = ({ onLogin }) => {
-  const onFinish = (values) => {
-    login(values)
-      .then(res => {
-        if (!res.ok) throw new Error('Неверные данные');
-        return res.json();
-      })
-      .then(data => {
-        onLogin(values.username);
-      })
-      .catch(() => alert('Ошибка входа'));
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:3001/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        // data: { token, username }
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', data.username);
+        onLogin(data.username, data.token); // используем хук useAuth.login
+        message.success('Успешный вход');
+      } else {
+        message.error(data.message || 'Ошибка входа');
+      }
+    } catch (err) {
+      message.error('Сервер не отвечает');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Form onFinish={onFinish}>
-      <Form.Item name="username" rules={[{ required: true }]}>
-        <Input placeholder="Имя пользователя" />
+    <Form onFinish={onFinish} layout="vertical">
+      <Form.Item name="username" label="Имя пользователя" rules={[{ required: true }]}>
+        <Input />
       </Form.Item>
-      <Form.Item name="password" rules={[{ required: true }]}>
-        <Input.Password placeholder="Пароль" />
+      <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
+        <Input.Password />
       </Form.Item>
-      <Button type="primary" htmlType="submit">Войти</Button>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          Войти
+        </Button>
+      </Form.Item>
     </Form>
   );
 };
