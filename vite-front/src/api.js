@@ -28,3 +28,14 @@ export const deleteProduct = (id) =>
   fetch(`${API_URL}/products/${id}`, {
     method: 'DELETE',
   });
+
+
+export const fetchCategories = async () => {
+  const res = await fetch('http://localhost:3001/api/categories');
+  if (!res.ok) throw new Error('Ошибка загрузки категорий');
+  return res.json();
+};
+
+
+export const fetchProductById = (id) =>
+  fetch(`${API_URL}/products/${id}`).then(res => res.json());

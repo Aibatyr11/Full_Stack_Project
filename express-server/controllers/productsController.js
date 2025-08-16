@@ -1,33 +1,30 @@
-const Product = require('../models/productModel');
+const Product = require('../models/Product');
 
 exports.getAllProducts = (req, res) => {
-  Product.getAll((err, products) => {
+  Product.getAll((err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json(products);
+    res.json(rows);
   });
 };
 
 exports.getProductById = (req, res) => {
-  const id = req.params.id;
-  Product.getById(id, (err, product) => {
+  Product.getById(req.params.id, (err, row) => {
     if (err) return res.status(500).json({ error: err.message });
-    if (!product) return res.status(404).json({ message: 'Продукт не найден' });
-    res.json(product);
+    if (!row) return res.status(404).json({ error: 'Товар не найден' });
+    res.json(row);
   });
 };
 
 exports.createProduct = (req, res) => {
-  const data = req.body;
-  Product.create(data, (err, result) => {
+  Product.create(req.body, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: 'Продукт создан', id: result.id });
+    res.status(201).json(result);
   });
 };
 
 exports.deleteProduct = (req, res) => {
-  const id = req.params.id;
-  Product.delete(id, (err) => {
+  Product.delete(req.params.id, (err) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Продукт удалён' });
+    res.json({ success: true });
   });
 };

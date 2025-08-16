@@ -1,47 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProducts } from '../api';
-import ProductGrid from '../components/ProductGrid';
-import AddProductForm from '../components/AddProductForm';
+import { fetchCategories } from '../api';
 import Navbar from '../components/Navbar';
-import { message } from 'antd';
+import { Card, Row, Col } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
+const { Meta } = Card;
 
 const Home = ({ user, onLogout }) => {
-  const [products, setProducts] = useState([]);
-
-  const loadProducts = () => {
-    fetchProducts().then(setProducts);
-  };
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    loadProducts();
+    fetchCategories().then(setCategories);
   }, []);
 
-  const handleAddToCart = (product) => {
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-    const existing = cart.find(item => item.id === product.id);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    message.success(`${product.name} добавлен в корзину`);
+  const goToCategory = (id) => {
+    navigate(`/category/${id}`);
   };
 
   return (
     <>
       <Navbar user={user} onLogout={onLogout} />
-      <h2>Товары</h2>
-      <ProductGrid products={products} onAddToCart={handleAddToCart} />
+      <h2 style={{ textAlign: 'center', marginBottom: 20 }}>Категории товаров</h2>
 
-      {user === 'admin' && (
-        <>
-          <h3 style={{ marginTop: 24 }}>Добавить новый товар</h3>
-          <AddProductForm onAdd={loadProducts} />
-        </>
-      )}
+      <Row gutter={[16, 16]}>
+        {categories.map(cat => (
+          <Col key={cat.id} xs={24} sm={12} md={8} lg={6}>
+            <Card
+              hoverable
+              cover={
+                <img
+                  alt={cat.name}
+                  src={cat.image || 'https://via.placeholder.com/300x200?text=No+Image'}
+                  style={{ height: 200, objectFit: 'cover' }}
+                  onClick={() => goToCategory(cat.id)}
+                />
+              }
+            >
+              <Meta title={cat.name} />
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </>
   );
 };

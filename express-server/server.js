@@ -136,6 +136,8 @@ const db = require('./db');
 // подключаем роуты (до listen)
 const productRoutes = require('./routes/products'); // если есть
 const authRoutes = require('./routes/auth');
+const categoriesRoutes = require('./routes/categories');
+app.use('/api/categories', categoriesRoutes);
 
 app.use('/api/products', productRoutes); // если есть
 app.use('/api/auth', authRoutes);
@@ -156,3 +158,5 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
+
+

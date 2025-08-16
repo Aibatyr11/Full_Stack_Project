@@ -1,43 +1,53 @@
-import React from 'react';
-import { Menu, Badge } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Menu, Button, Modal } from 'antd';
+import { Link } from 'react-router-dom';
+import AddProductForm from './AddProductForm';
 
-const Navbar = ({ onLogout }) => {
-  const navigate = useNavigate();
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+const Navbar = ({ user, onLogout }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const menuItems = [
-    { label: 'Товары', key: '/' },
-    { label: 'Профиль', key: '/profile' },
-    {
-      label: (
-        <Badge count={cartCount} size="small">
-          <ShoppingCartOutlined style={{ fontSize: 18 }} /> Корзина
-        </Badge>
-      ),
-      key: '/cart'
-    },
-    { label: 'Выйти', key: 'logout' },
-  ];
-
-  const handleClick = (e) => {
-    if (e.key === 'logout') {
-      onLogout();
-    } else {
-      navigate(e.key);
-    }
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
-    <Menu
-      mode="horizontal"
-      theme="light"
-      onClick={handleClick}
-      style={{ marginBottom: 24, borderRadius: 8 }}
-      items={menuItems}
-    />
+    <>
+      <Menu mode="horizontal">
+        <Menu.Item key="home">
+          <Link to="/">Главная</Link>
+        </Menu.Item>
+        
+        <Menu.Item key="profile">
+          <Link to="/profile">Профиль</Link>
+        </Menu.Item>
+
+        
+        <Menu.Item key="addProduct">
+            <Button type="primary" onClick={openModal}>
+              Добавить товар
+            </Button>
+        </Menu.Item>
+        
+
+        <Menu.Item key="cart">
+          <Link to="/cart">Корзина</Link>
+        </Menu.Item>
+
+        <Menu.Item key="logout" onClick={onLogout} style={{ marginLeft: 'auto' }}>
+          Выйти
+        </Menu.Item>
+      </Menu>
+
+      {/* 🔥 Модальное окно для добавления товара */}
+      <Modal
+        title="Добавить новый товар"
+        open={isModalOpen}
+        onCancel={closeModal}
+        footer={null}
+        destroyOnClose
+      >
+        <AddProductForm onAdd={closeModal} />
+      </Modal>
+    </>
   );
 };
 

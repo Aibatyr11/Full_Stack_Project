@@ -16,10 +16,9 @@ const LoginForm = ({ onLogin }) => {
 
       const data = await res.json();
       if (res.ok) {
-        // data: { token, username }
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', data.username);
-        onLogin(data.username, data.token); // используем хук useAuth.login
+        onLogin(data.username, data.token);
         message.success('Успешный вход');
       } else {
         message.error(data.message || 'Ошибка входа');
@@ -32,19 +31,28 @@ const LoginForm = ({ onLogin }) => {
   };
 
   return (
-    <Form onFinish={onFinish} layout="vertical">
-      <Form.Item name="username" label="Имя пользователя" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
-        <Input.Password />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Войти
-        </Button>
-      </Form.Item>
-    </Form>
+    <div style={{
+      maxWidth: 400,
+      margin: '0 auto',
+      padding: '20px',
+      background: '#fff',
+      borderRadius: 8,
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+    }}>
+      <Form onFinish={onFinish} layout="vertical">
+        <Form.Item name="username" label="Имя пользователя" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
+          <Input.Password />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block loading={loading}>
+            Войти
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 

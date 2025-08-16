@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
@@ -6,11 +5,13 @@ import Auth from './pages/Auth';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
+import CategoryPage from './pages/CategoryPage';
+import ProductPage from './pages/ProductPage';
 
 import './App.css';
 
 function App() {
-  const { user, token, login, logout } = useAuth();
+  const { user, login, logout } = useAuth();
 
   return (
     <Router>
@@ -18,6 +19,9 @@ function App() {
         <Route path="/" element={user ? <Home user={user} onLogout={logout} /> : <Auth onLogin={login} />} />
         <Route path="/profile" element={<Profile onLogout={logout} />} />
         <Route path="/cart" element={<Cart onLogout={logout} />} />
+        <Route path="/category/:id" element={<CategoryPage user={user} onLogout={logout} />} />
+        <Route path="/product/:id" element={<ProductPage user={user} onLogout={logout} />} />
+
       </Routes>
     </Router>
   );

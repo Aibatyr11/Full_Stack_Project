@@ -44,15 +44,12 @@ const Profile = ({ onLogout }) => {
       <Card style={{ maxWidth: 600, margin: '20px auto', textAlign: 'center' }}>
         <Avatar
           size={120}
-          src={profile.avatar || 'https://via.placeholder.com/150'}
+          src={profile.avatar || ''}
           style={{ marginBottom: 16 }}
         />
         <h2>{profile.username}</h2>
         <p><strong>Email:</strong> {profile.email || 'Не указано'}</p>
         <p><strong>Описание:</strong> {profile.description || '—'}</p>
-        <div style={{ marginTop: 16 }}>
-          <Button danger onClick={() => onLogout?.()}>Выйти</Button>
-        </div>
       </Card>
     </>
   );
