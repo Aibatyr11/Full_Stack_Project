@@ -31,6 +31,15 @@ const AddProductForm = ({ onAdd }) => {
         <Input placeholder="URL изображения" />
       </Form.Item>
 
+      <Form.Item name="description">
+        <Input.TextArea placeholder="Описание товара" rows={3} />
+      </Form.Item>
+
+      <Form.Item name="youtube_link">
+        <Input placeholder="Ссылка на YouTube видео" />
+      </Form.Item>
+
+
       {/* 🔥 выпадающий список категорий */}
       <Form.Item name="category_id" rules={[{ required: true }]}>
         <Select placeholder="Выберите категорию" style={{ width: 180 }}>

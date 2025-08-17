@@ -8,7 +8,7 @@ const ProductGrid = ({ products, onAddToCart }) => {
   return (
     <Row gutter={[16, 16]}>
       {products.map((product) => (
-        <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
+        <Col key={product.id} xs={24} sm={12} md={8}>
           <Card
             hoverable
             cover={
@@ -17,7 +17,7 @@ const ProductGrid = ({ products, onAddToCart }) => {
                   alt={product.name}
                   src={product.image || 'https://via.placeholder.com/240x160?text=No+Image'}
                   style={{
-                    height: 160,
+                    height: 200,
                     width: '100%',
                     objectFit: 'contain',
                     backgroundColor: '#fff',
