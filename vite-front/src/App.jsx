@@ -1,82 +1,30 @@
-import React,{ useState } from 'react'
-import { Button, message, Modal, Table  } from 'antd';
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
+import Auth from './pages/Auth';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import Cart from './pages/Cart';
+import CategoryPage from './pages/CategoryPage';
+import ProductPage from './pages/ProductPage';
+
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-  
-  const [messageApi, contextHolder] = message.useMessage();
-  const info = () => {
-    messageApi.info('Hello, Ant Design!');
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [data, setData] = useState([])
-
-
- const fetchData = () => {    
-  const requestOptions = {
-    method: "GET", 
-    headers: { "Content-Type": "application/json" },
-  };    
-
-  fetch("http://localhost:8080/api/todos", requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      setData(data);        
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error("Ошибка при получении данных:", error);
-    });
-};
-
+  const { user, login, logout } = useAuth();
 
   return (
-    <>
-    <Modal
-        title="Basic Modal"
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
-        onCancel={() => setIsModalOpen(false)}
-      >
-      </Modal>
+    <Router>
+      <Routes>
+        <Route path="/" element={user ? <Home user={user} onLogout={logout} /> : <Auth onLogin={login} />} />
+        <Route path="/profile" element={<Profile onLogout={logout} />} />
+        <Route path="/cart" element={<Cart onLogout={logout} />} />
+        <Route path="/category/:id" element={<CategoryPage user={user} onLogout={logout} />} />
+        <Route path="/product/:id" element={<ProductPage user={user} onLogout={logout} />} />
 
-   {contextHolder}
-      <Button type="primary" onClick={info}>
-        Display normal message
-      </Button>
-
-
-      <Button type="primary" onClick={() => setIsModalOpen(true)}>
-        Open Modal
-      </Button>
-      <Button onClick={() =>  {fetchData()}}>asd</Button>
-      <Table
-        size="small"
-        dataSource={data}
-        columns={[
-          {
-            title: "id",
-            dataIndex: "id",
-            key: "id",
-          },
-          {
-            title: "title",
-            dataIndex: "title",
-            key: "title",
-          },
-          {
-            title: "completed",
-            dataIndex: "completed",
-            key: "completed",
-          },
-        ]}
-      />
-    </>
-  )
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
