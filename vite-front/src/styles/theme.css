@@ -1,0 +1,86 @@
+/* ==== Navbar (Menu) ==== */
+.ant-menu-horizontal {
+  background-color: #ffffff !important;
+  border-radius: 12px;
+  margin: 16px auto;
+  max-width: 1000px;
+  box-shadow: 0 4px 12px rgba(0, 39, 102, 0.1);
+  padding: 0 16px;
+  border: none;
+}
+
+.ant-menu-item {
+  color: #002766 !important;
+  font-size: 16px;
+  text-align: center;
+  padding: 14px 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px !important;
+  margin: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.ant-menu-item:hover {
+  background-color: #e6f7ff !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #bae7ff !important;
+  color: #002766 !important;
+  font-weight: bold;
+}
+
+/* ==== Product Cards ==== */
+.ant-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 39, 102, 0.1);
+}
+
+.ant-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 39, 102, 0.2);
+}
+
+.image-container {
+  height: 200px; /* одинаковая высота для всех картинок */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* чтобы показывать полное изображение */
+  transition: transform 0.4s ease;
+}
+
+.ant-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.ant-card-meta-title {
+  font-size: 18px;
+  color: #002766;
+  font-weight: bold;
+}
+
+.ant-card-meta-description {
+  color: #333;
+}
+
+/* ==== Buttons ==== */
+.ant-btn-primary {
+  background-color: #002766;
+  border-color: #002766;
+}
+
+.ant-btn-primary:hover {
+  background-color: #004b9e;
+  border-color: #004b9e;
+}
