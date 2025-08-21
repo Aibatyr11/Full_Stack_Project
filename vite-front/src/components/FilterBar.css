@@ -1,0 +1,87 @@
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: linear-gradient(135deg, #e6f3ff, #f5faff);
+  padding: 15px 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 21, 41, 0.08);
+}
+
+/* кнопки брендов */
+.brand-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand-btn {
+  background: #f0f7ff;
+  border: 2px solid transparent;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 600;
+  color: #001529;
+}
+
+.brand-btn:hover {
+  background: #1890ff;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(24, 144, 255, 0.3);
+}
+
+.brand-btn.active {
+  background: #1890ff;
+  color: #fff;
+  border-color: #0050b3;
+  box-shadow: 0 3px 10px rgba(0, 80, 179, 0.4);
+}
+
+/* select */
+.sort-select select {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid #d6e4ff;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #001529;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 21, 41, 0.05);
+}
+
+.sort-select select:hover {
+  border-color: #1890ff;
+  box-shadow: 0 3px 10px rgba(24, 144, 255, 0.2);
+}
+.brand-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-filter input {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid #d6e4ff;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #001529;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 21, 41, 0.05);
+}
+
+.brand-filter input:focus {
+  border-color: #1890ff;
+  box-shadow: 0 3px 10px rgba(24, 144, 255, 0.2);
+  outline: none;
+}

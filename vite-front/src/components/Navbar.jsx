@@ -1,9 +1,17 @@
 import React from "react";
 import { Input, Row, Col } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 
 const Navbar = ({ user, onLogout }) => {
+  const navigate = useNavigate();
+
+  const handleSearch = (value) => {
+    if (value.trim()) {
+      navigate(`/search?q=${encodeURIComponent(value)}`);
+    }
+  };
+
   return (
     <div style={{ borderBottom: "1px solid #eee", marginBottom: 20 }}>
       {/* Верхняя линия */}
@@ -18,7 +26,6 @@ const Navbar = ({ user, onLogout }) => {
         }}
       >
         <span>+7 777 777 77 77 · Доставка и оплата · Пункты выдачи</span>
-        <span>Войти | Корзина</span>
       </div>
 
       {/* Нижняя линия */}
@@ -29,16 +36,11 @@ const Navbar = ({ user, onLogout }) => {
           background: "#fff",
         }}
       >
-        <Col flex="150px">
-          <Link to="/" style={{ fontSize: 20, fontWeight: "bold", color: "#b68257" }}>
-            LOFT
-          </Link>
-        </Col>
-
         <Col flex="auto" style={{ textAlign: "center" }}>
           <Input.Search
             placeholder="Поиск"
             style={{ maxWidth: 400 }}
+            onSearch={handleSearch}
           />
         </Col>
 

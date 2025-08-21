@@ -1,4 +1,3 @@
-// src/components/LoginForm.jsx
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 
@@ -40,10 +39,18 @@ const LoginForm = ({ onLogin }) => {
       boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
     }}>
       <Form onFinish={onFinish} layout="vertical">
-        <Form.Item name="username" label="Имя пользователя" rules={[{ required: true }]}>
+        <Form.Item
+          name="username"
+          label="Имя пользователя"
+          rules={[{ required: true, message: 'Введите имя пользователя' }]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
+        <Form.Item
+          name="password"
+          label="Пароль"
+          rules={[{ required: true, message: 'Введите пароль' }]}
+        >
           <Input.Password />
         </Form.Item>
         <Form.Item>

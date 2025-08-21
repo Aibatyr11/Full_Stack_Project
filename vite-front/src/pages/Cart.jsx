@@ -1,73 +1,72 @@
+// src/pages/Cart.jsx
 import React, { useState, useEffect } from 'react';
 import { Table, Button, InputNumber, message } from 'antd';
 import Navbar from '../components/Navbar';
+
+import { fetchCart, updateCartItem, removeCartItem } from '../api';
+
+// Функция для приведения цены к числу
+const parsePrice = (p) => {
+  if (!p) return 0;
+  return Number(String(p).replace(/[^\d.-]/g, "")) || 0;
+};
 
 const Cart = ({ onLogout }) => {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('cart') || '[]');
-    setCart(stored);
+    loadCart();
   }, []);
 
-  const updateCart = (newCart) => {
-    setCart(newCart);
-    localStorage.setItem('cart', JSON.stringify(newCart));
-  };
-
-  const handleQuantityChange = (id, quantity) => {
-    if (quantity <= 0) {
-      handleRemove(id);
-      return;
+  const loadCart = async () => {
+    try {
+      const data = await fetchCart();
+      setCart(data);
+    } catch {
+      message.error("Ошибка загрузки корзины");
     }
-    const newCart = cart.map(item =>
-      item.id === id ? { ...item, quantity } : item
-    );
-    updateCart(newCart);
   };
 
-  const handleRemove = (id) => {
-    const newCart = cart.filter(item => item.id !== id);
-    updateCart(newCart);
+  const handleQuantityChange = async (id, quantity) => {
+    if (quantity <= 0) {
+      await removeCartItem(id);
+      message.info("Товар удалён");
+    } else {
+      await updateCartItem(id, quantity);
+    }
+    loadCart();
+  };
+
+  const handleRemove = async (id) => {
+    await removeCartItem(id);
     message.info('Товар удалён из корзины');
+    loadCart();
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // Считаем общую сумму
+  const totalPrice = cart.reduce((sum, item) => {
+    const price = parsePrice(item.price);
+    const qty = Number(item.quantity) || 0;
+    return sum + price * qty;
+  }, 0);
 
   const columns = [
     { title: 'Название', dataIndex: 'name', key: 'name' },
-    {
-      title: 'Цена',
-      dataIndex: 'price',
-      key: 'price',
-      render: (price) => `${price} ₸`
-    },
+    { title: 'Цена', dataIndex: 'price', key: 'price', render: (p) => `${parsePrice(p)} ₸` },
     {
       title: 'Количество',
       dataIndex: 'quantity',
       key: 'quantity',
-      render: (quantity, record) => (
+      render: (q, record) => (
         <InputNumber
           min={1}
-          value={quantity}
-          onChange={(value) => handleQuantityChange(record.id, value)}
+          value={Number(q)}
+          onChange={(v) => handleQuantityChange(record.id, v)}
         />
       )
     },
-    {
-      title: 'Сумма',
-      key: 'sum',
-      render: (_, record) => `${record.price * record.quantity} ₸`
-    },
-    {
-      title: 'Действие',
-      key: 'action',
-      render: (_, record) => (
-        <Button danger onClick={() => handleRemove(record.id)}>
-          Удалить
-        </Button>
-      )
-    }
+    { title: 'Сумма', key: 'sum', render: (_, r) => `${parsePrice(r.price) * Number(r.quantity)} ₸` },
+    { title: 'Действие', key: 'action', render: (_, r) => <Button danger onClick={() => handleRemove(r.id)}>Удалить</Button> }
   ];
 
   return (

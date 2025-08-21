@@ -137,6 +137,12 @@ const db = require('./db');
 const productRoutes = require('./routes/products'); // если есть
 const authRoutes = require('./routes/auth');
 const categoriesRoutes = require('./routes/categories');
+const favoritesRoutes = require('./routes/favorites');
+const cartRoutes = require('./routes/cart');
+
+app.use('/api/cart', cartRoutes);
+app.use('/api/favorites', favoritesRoutes);
+
 app.use('/api/categories', categoriesRoutes);
 
 app.use('/api/products', productRoutes); // если есть

@@ -52,6 +52,7 @@ exports.getProfile = (req, res) => {
     if (!user) return res.status(404).json({ message: 'Пользователь не найден' });
 
     res.json({
+      id: user.id,
       username: user.username,
       email: user.email || '',
       description: user.description || '',

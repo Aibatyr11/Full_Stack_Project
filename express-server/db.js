@@ -32,15 +32,18 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// создаёт абсолютный путь к Sqlite/shop.db
 const dbPath = path.resolve(__dirname, './mydatabase.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Ошибка подключения к базе:', err.message);
   } else {
-    console.log('✅ Успешно подключено к SQLite базе:', dbPath);
+    console.log('✅ Подключено к базе:', dbPath);
+    console.log("DB PATH:", dbPath);
+
+
+    // включаем поддержку FOREIGN KEY
+    db.run("PRAGMA foreign_keys = ON");
   }
 });
 
 module.exports = db;
-

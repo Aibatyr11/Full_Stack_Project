@@ -1,127 +1,148 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchProducts } from '../api';
-import Navbar from '../components/Navbar';
-import { Rate, Spin } from 'antd';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { fetchProducts } from "../api";
+import Navbar from "../components/Navbar";
 
 const ProductPage = ({ user, onLogout }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [mainImage, setMainImage] = useState(null);
 
   useEffect(() => {
-    fetchProducts().then((products) => {
-      const found = products.find((p) => p.id === parseInt(id));
-      setProduct(found);
-      setMainImage(found?.image || null);
-      setLoading(false);
-    });
+    const loadProduct = async () => {
+      const products = await fetchProducts();
+      const found = products.find((p) => String(p.id) === String(id));
+      setProduct(found || null);
+    };
+    loadProduct();
   }, [id]);
 
-  if (loading) return <Spin size="large" style={{ display: 'block', margin: '50px auto' }} />;
-  if (!product) return <p style={{ textAlign: 'center' }}>Товар не найден</p>;
-
-  // пока для примера — одна и та же картинка несколько раз
-    // Берем массив картинок
-  const images = product.images && product.images.length > 0
-    ? product.images
-    : [product.image].filter(Boolean); // если только одно фото
-
+  if (!product) {
+    return (
+      <div>
+        <Navbar user={user} onLogout={onLogout} />
+        <p style={{ padding: 20, textAlign: "center", fontSize: "18px" }}>
+          Товар не найден
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <>
+    <div style={{ minHeight: "100vh", background: "#f8f9fa" }}>
       <Navbar user={user} onLogout={onLogout} />
-      <div style={{ padding: 20 }}>
+
+      <div
+        style={{
+          maxWidth: "1000px",
+          margin: "40px auto",
+          background: "white",
+          borderRadius: "16px",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+          overflow: "hidden",
+          padding: "40px",
+        }}
+      >
         <div
           style={{
-            display: 'flex',
-            gap: 40,
-            maxWidth: 1300,
-            margin: '0 auto',
-            alignItems: 'flex-start',
+            display: "flex",
+            gap: "40px",
+            alignItems: "flex-start",
+            marginBottom: "30px",
           }}
         >
-          {/* Блок с фото */}
-          <div style={{ flex: 1, maxWidth: 500 }}>
-            {/* Большое изображение */}
-            <div
+          {/* Фото товара */}
+          <div
+            style={{
+              flex: "1 1 40%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "12px",
+              padding: "20px",
+              boxShadow: "inset 0 0 15px rgba(0,0,0,0.05)",
+              background: "#fff",
+            }}
+          >
+            <img
+              src={product.image}
+              alt={product.name}
               style={{
-                border: '1px solid #ddd',
-                borderRadius: 6,
-                padding: 10,
-                textAlign: 'center',
-                marginBottom: 10,
-                backgroundColor: '#fff',
+                width: "100%",
+                maxWidth: "208px", // уменьшено на 20%
+                height: "auto",
+                objectFit: "contain",
+                borderRadius: "8px",
+              }}
+            />
+          </div>
+
+          {/* Информация о товаре */}
+          <div style={{ flex: "1 1 55%" }}>
+            <h1
+              style={{
+                fontSize: "28px",
+                marginBottom: "15px",
+                fontWeight: "600",
               }}
             >
-              <img
-                src={mainImage || 'https://via.placeholder.com/500x500?text=No+Image'}
-                alt={product.name}
-                style={{ maxWidth: '100%', maxHeight: 450, objectFit: 'contain' }}
-              />
-            </div>
-
-            {/* Превью */}
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-              {images.map((img, index) => (
-                <div
-                  key={index}
-                  onClick={() => setMainImage(img)}
-                  style={{
-                    border: mainImage === img ? '2px solid #1890ff' : '1px solid #ddd',
-                    borderRadius: 4,
-                    padding: 4,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <img
-                    src={img}
-                    alt={`preview-${index}`}
-                    style={{ width: 70, height: 70, objectFit: 'contain' }}
-                  />
-                </div>
-              ))}
-            </div>
-
-            <p style={{ marginTop: 10, color: '#666', textAlign: 'center' }}>
-              Чтобы увеличить, нажмите на картинку
-            </p>
-          </div>
-
-          {/* Блок с инфо */}
-          <div style={{ flex: 1 }}>
-            <h1 style={{ marginBottom: 10 }}>{product.name}</h1>
-            <Rate disabled defaultValue={4} />
-            <p style={{ fontSize: 22, fontWeight: 'bold', marginTop: 15, color: '#1890ff' }}>
-              Цена: {product.price} ₸
+              {product.name}
+            </h1>
+            <p
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                marginBottom: "20px",
+                color: "#4A4A4A",
+              }}
+            >
+              {product.price} ₸
             </p>
 
-            {/* YouTube (если есть) */}
-            {product.youtube_link && (
-              <div style={{ margin: '20px 0' }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src={product.youtube_link}
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ borderRadius: 6 }}
-                ></iframe>
-              </div>
-            )}
-
-            {/* Описание */}
-            <div style={{ marginTop: 20, lineHeight: 1.6 }}>
-              <h3>Описание</h3>
-              <p>{product.description  || 'Описание товара отсутствует.'}</p>
-            </div>
+            <h3 style={{ marginBottom: "10px", fontSize: "20px" }}>Описание</h3>
+            <p style={{ lineHeight: "1.6", color: "#555" }}>
+              {product.description || "Описание скоро появится..."}
+            </p>
           </div>
         </div>
+
+        {/* Видеообзор */}
+        {product.youtube_link && (
+          <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <h3 style={{ fontSize: "20px", marginBottom: "10px" }}>
+              Видеообзор
+            </h3>
+            <div
+              style={{
+                display: "inline-block",
+                position: "relative",
+                width: "80%",
+                paddingBottom: "45%", // чтобы видео было пропорционально
+                height: 0,
+                overflow: "hidden",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                background: "transparent", // убран белый фон
+              }}
+            >
+              <iframe
+                src={product.youtube_link.replace("watch?v=", "embed/")}
+                title="Видеообзор"
+                frameBorder="0"
+                allowFullScreen
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  border: "none",
+                }}
+              ></iframe>
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

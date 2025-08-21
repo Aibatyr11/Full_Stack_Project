@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 import CategoryPage from './pages/CategoryPage';
 import ProductPage from './pages/ProductPage';
+import SearchPage from './pages/SearchPage';
 
 import './App.css';
 
@@ -21,6 +22,8 @@ function App() {
         <Route path="/cart" element={<Cart onLogout={logout} />} />
         <Route path="/category/:id" element={<CategoryPage user={user} onLogout={logout} />} />
         <Route path="/product/:id" element={<ProductPage user={user} onLogout={logout} />} />
+        <Route path="/search" element={<SearchPage user={user} onLogout={logout} />} />
+
 
       </Routes>
     </Router>
