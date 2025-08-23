@@ -1,5 +1,5 @@
 const API_URL = 'http://localhost:3001/api';
-
+// ===== auth (как было) =====
 export const login = (credentials) =>
   fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -14,48 +14,28 @@ export const register = (credentials) =>
     body: JSON.stringify(credentials),
   });
 
+// ===== products =====
 export const fetchProducts = () =>
   fetch(`${API_URL}/products`).then(res => res.json());
 
-export const addProduct = (product) =>
-  fetch(`${API_URL}/products`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(product),
-  });
-
-export const deleteProduct = (id) =>
-  fetch(`${API_URL}/products/${id}`, {
-    method: 'DELETE',
-  });
 
 
-export const fetchCategories = async () => {
-  const res = await fetch('http://localhost:3001/api/categories');
-  if (!res.ok) throw new Error('Ошибка загрузки категорий');
-  return res.json();
-};
+// ===== stores =====
+export const fetchStores = () =>
+  fetch(`${API_URL}/stores`).then(r => r.json());
 
-
-export const fetchProductById = (id) =>
-  fetch(`${API_URL}/products/${id}`).then(res => res.json());
-
-
-
-
-// получить избранные товары
+// ===== favorites (как было) =====
 export const fetchFavorites = async () => {
-  const token = localStorage.getItem("token"); // токен из localStorage
+  const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/favorites`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // 👈 передаем токен
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.json();
 };
 
-// добавить в избранное
 export const addFavorite = async (productId) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/favorites`, {
@@ -69,60 +49,90 @@ export const addFavorite = async (productId) => {
   return res.json();
 };
 
-// удалить из избранного
-export const removeFavorite = async (productId) => {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/favorites/${productId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+// ===== CART =====
+
+
+export const fetchProductById = async (id) => {
+  const res = await fetch(`${API_URL}/products/${id}`);
+  if (!res.ok) throw new Error("Ошибка загрузки товара");
   return res.json();
 };
 
-
-
-
-export const fetchCart = async () => {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/cart`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+export const fetchProductOffers = async (productId) => {
+  const res = await fetch(`${API_URL}/products/${productId}/offers`);
+  if (!res.ok) throw new Error("Ошибка загрузки предложений");
   return res.json();
 };
 
-export const addToCart = async (productId, quantity = 1) => {
+export const addToCart = async (storeProductId, quantity = 1) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/cart`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "Authorization": token ? `Bearer ${token}` : "",
     },
-    body: JSON.stringify({ productId, quantity }),
+    body: JSON.stringify({
+      storeProductId: Number(storeProductId),
+      quantity: Number(quantity),
+    }),
   });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Ошибка добавления в корзину");
+  return data;
+};
+
+// Корзина
+export const fetchCart = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/cart`, {
+    headers: { 
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  });
+  if (!res.ok) throw new Error("Ошибка загрузки корзины");
   return res.json();
 };
 
-export const updateCartItem = async (productId, quantity) => {
+
+export const updateCartItem = async (cartId, quantity) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/cart/${productId}`, {
+  const res = await fetch(`${API_URL}/cart/${cartId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({ quantity }),
   });
   return res.json();
 };
 
-export const removeCartItem = async (productId) => {
+export const removeCartItem = async (cartId) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/cart/${productId}`, {
+  const res = await fetch(`${API_URL}/cart/${cartId}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
+  return res.json();
+};
+
+
+// прочее (если используешь)
+export const addProduct = (product) =>
+  fetch(`${API_URL}/products`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(product),
+  });
+
+export const deleteProduct = (id) =>
+  fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
+
+export const fetchCategories = async () => {
+  const res = await fetch(`${API_URL}/categories`);
+  if (!res.ok) throw new Error('Ошибка загрузки категорий');
   return res.json();
 };

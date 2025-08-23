@@ -3,6 +3,12 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/authMiddleware');
 
+/**
+ * Схема корзины:
+ * cart(id PK, user_id, store_product_id, quantity)
+ * UNIQUE(user_id, store_product_id)
+ */
+
 // получить корзину текущего пользователя
 router.get('/', auth, (req, res) => {
   const userId = req.user.id;
@@ -13,6 +19,7 @@ router.get('/', auth, (req, res) => {
       c.quantity   AS quantity,
       sp.id        AS store_product_id,
       sp.price     AS price,
+      p.id         AS product_id,
       p.name       AS product_name,
       s.name       AS store_name
     FROM cart c
@@ -22,13 +29,15 @@ router.get('/', auth, (req, res) => {
     WHERE c.user_id = ?
     ORDER BY c.id DESC
   `, [userId], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      console.error('Ошибка при получении корзины:', err.message);
+      return res.status(500).json({ error: err.message });
+    }
     res.json(rows);
   });
 });
 
-// добавить в корзину
-// добавить в корзину
+// добавить в корзину (storeProductId, quantity)
 router.post('/', auth, (req, res) => {
   const userId = req.user.id;
   const { storeProductId, quantity } = req.body;
@@ -47,20 +56,11 @@ router.post('/', auth, (req, res) => {
       console.error('Ошибка при добавлении в корзину:', err.message);
       return res.status(500).json({ error: err.message });
     }
-
-    // возвращаем cart_id
-    db.get(`SELECT id as cart_id FROM cart WHERE user_id=? AND store_product_id=?`, 
-      [userId, storeProductId], 
-      (err, row) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true, cart_id: row.cart_id });
-      }
-    );
+    res.json({ success: true, cart_id: this.lastID });
   });
 });
 
-
-// изменить количество
+// изменить количество по cart_id
 router.put('/:cartId', auth, (req, res) => {
   const userId = req.user.id;
   const { cartId } = req.params;
@@ -86,7 +86,7 @@ router.put('/:cartId', auth, (req, res) => {
   }
 });
 
-// удалить из корзины
+// удалить позицию из корзины по cart_id
 router.delete('/:cartId', auth, (req, res) => {
   const userId = req.user.id;
   const { cartId } = req.params;

@@ -120,49 +120,36 @@
 // });
 
 
-// express-server/server.js
 const express = require('express');
 const cors = require('cors');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('./db');
+
+const productRoutes = require('./routes/products');
+const storesRoutes = require('./routes/stores');
+const cartRoutes = require('./routes/cartRoutes');
+
+const authRoutes = require('./routes/auth');        // если уже есть (оставляю)
+const categoriesRoutes = require('./routes/categories'); // если уже есть (оставляю)
+const favoritesRoutes = require('./routes/favorites');   // если уже есть (оставляю)
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// подключаем db (используем модуль db.js)
-const db = require('./db');
-
-// подключаем роуты (до listen)
-const productRoutes = require('./routes/products'); // если есть
-const authRoutes = require('./routes/auth');
-const categoriesRoutes = require('./routes/categories');
-const favoritesRoutes = require('./routes/favorites');
-const cartRoutes = require('./routes/cart');
-
+// Роуты
+app.use('/api/products', productRoutes);
+app.use('/api/stores', storesRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/favorites', favoritesRoutes);
 
-app.use('/api/categories', categoriesRoutes);
+// остальные — если они у тебя есть
+if (authRoutes)       app.use('/api/auth', authRoutes);
+if (categoriesRoutes) app.use('/api/categories', categoriesRoutes);
+if (favoritesRoutes)  app.use('/api/favorites', favoritesRoutes);
 
-app.use('/api/products', productRoutes); // если есть
-app.use('/api/auth', authRoutes);
+// ping
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
-// другие маршруты (countries и т.д.) — убедись, что db определено (в db.js уже)
-app.get('/api/countries', (req, res) => {
-  db.all('SELECT * FROM Country', [], (err, rows) => {
-    if (err) {
-      console.error('Ошибка при запросе:', err.message);
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(rows);
-  });
-});
-
-// Прослушка
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Сервер запущен на http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server http://localhost:${PORT}`));
 
 
