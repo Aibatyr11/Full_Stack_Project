@@ -4,10 +4,7 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/authMiddleware');
 
-/**
- * Получить предложения по товару
- * GET /api/products/:productId/offers
- */
+
 router.get('/products/:productId/offers', (req, res) => {
   const productId = req.params.productId;
 
@@ -25,12 +22,7 @@ router.get('/products/:productId/offers', (req, res) => {
   });
 });
 
-/**
- * Создать/обновить предложение магазина по товару
- * POST /api/offers
- * body: { storeId, productId, price, stock, url }
- * upssert по (store_id, product_id)
- */
+
 router.post('/offers', auth, (req, res) => {
   const { storeId, productId, price, stock = 0, url = null } = req.body;
   if (!storeId || !productId || !price)
@@ -52,10 +44,7 @@ router.post('/offers', auth, (req, res) => {
   });
 });
 
-/**
- * Удалить предложение
- * DELETE /api/offers/:id
- */
+
 router.delete('/offers/:id', auth, (req, res) => {
   db.run('DELETE FROM store_products WHERE id = ?', [req.params.id], function (err) {
     if (err) return res.status(500).json({ error: err.message });

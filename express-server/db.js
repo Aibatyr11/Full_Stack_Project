@@ -37,11 +37,11 @@ const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Ошибка подключения к базе:', err.message);
   } else {
-    console.log('✅ Подключено к базе:', dbPath);
+    console.log('Подключено к базе:', dbPath);
     console.log("DB PATH:", dbPath);
 
 
-    // включаем поддержку FOREIGN KEY
+    
     db.run("PRAGMA foreign_keys = ON");
   }
 });

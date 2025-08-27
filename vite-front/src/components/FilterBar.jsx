@@ -10,7 +10,6 @@ const FilterBar = ({ setBrand, sort, setSort }) => {
 
   return (
     <div className="filter-bar">
-      {/* фильтр брендов */}
       <div className="brand-filter">
         <label htmlFor="brandInput">Бренд:</label>
         <input
@@ -23,7 +22,6 @@ const FilterBar = ({ setBrand, sort, setSort }) => {
         <button onClick={handleFilter}>Фильтровать</button>
       </div>
 
-      {/* сортировка */}
       <div className="sort-select">
         <select value={sort} onChange={(e) => setSort(e.target.value)}>
           <option value="default">Как есть</option>

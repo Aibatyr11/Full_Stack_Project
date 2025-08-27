@@ -27,7 +27,7 @@ router.get('/', auth, (req, res) => {
   });
 });
 
-// добавить в корзину
+
 // добавить в корзину
 router.post('/', auth, (req, res) => {
   const userId = req.user.id;

@@ -82,3 +82,30 @@ exports.getProfile = (req, res) => {
     });
   });
 };
+
+
+
+
+exports.updateProfile = (req, res) => {
+  const userId = req.user.id; // ID берём из токена
+  const { username, email, description, avatar } = req.body;
+
+  // Если совсем нет данных
+  if (!username && !email && !description && !avatar) {
+    return res.status(400).json({ message: "Нет данных для обновления" });
+  }
+
+  User.updateUser(
+    userId,
+    { username, email, description, avatar },
+    (err, updatedUser) => {
+      if (err) {
+        console.error("updateProfile error:", err);
+        return res.status(500).json({ message: "Ошибка обновления профиля" });
+      }
+
+      // ✅ Возвращаем только обновлённого пользователя
+      res.json(updatedUser);
+    }
+  );
+};

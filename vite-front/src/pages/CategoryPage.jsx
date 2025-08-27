@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Row, Col, Button, message, notification } from "antd";
-import { ShoppingCartOutlined, HeartOutlined } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 
-import { fetchProducts, fetchCategories, addFavorite, addToCart } from "../api";
+import { fetchProducts, fetchCategories, addFavorite } from "../api";
 import Navbar from "../components/Navbar";
 import "../components/ProductGrid.css"; // стили карточек
 
@@ -28,35 +28,6 @@ const CategoryPage = ({ user, onLogout }) => {
       setCategory(found);
     });
   }, [id]);
-
-  // Добавление в корзину
-  const handleAddToCart = async (product) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      message.error("Нужно войти в аккаунт");
-      return;
-    }
-    try {
-      await addToCart(product.id);
-
-      api.success({
-        message: "Товар добавлен в корзину 🛒",
-        description: `${product.name} успешно добавлен.`,
-        placement: "bottomRight",
-        icon: <ShoppingCartOutlined style={{ color: "#52c41a" }} />,
-        duration: 3.5,
-        btn: (
-          <Link to="/cart">
-            <Button type="primary" size="small">
-              Перейти в корзину
-            </Button>
-          </Link>
-        ),
-      });
-    } catch {
-      message.error("Ошибка при добавлении в корзину");
-    }
-  };
 
   // Добавление в избранное
   const handleAddToFavorites = async (product) => {
@@ -120,11 +91,11 @@ const CategoryPage = ({ user, onLogout }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: 20,
+            marginBottom: 30,
             background: "#f9f9f9",
             padding: "15px 20px",
-            borderRadius: 8,
-            border: "1px solid #ddd",
+            borderRadius: 10,
+            border: "1px solid #e0e0e0",
           }}
         >
           {/* Фильтр по бренду */}
@@ -138,7 +109,7 @@ const CategoryPage = ({ user, onLogout }) => {
               style={{
                 padding: "6px 10px",
                 border: "1px solid #ccc",
-                borderRadius: 4,
+                borderRadius: 6,
               }}
             />
             <Button
@@ -159,7 +130,7 @@ const CategoryPage = ({ user, onLogout }) => {
               style={{
                 padding: "6px 10px",
                 border: "1px solid #ccc",
-                borderRadius: 4,
+                borderRadius: 6,
               }}
             >
               <option value="default">По умолчанию</option>
@@ -168,9 +139,8 @@ const CategoryPage = ({ user, onLogout }) => {
             </select>
           </div>
         </div>
-
-        {/* Сетка товаров */}
-        <Row gutter={[24, 24]}>
+        
+        <Row gutter={[30, 110]}> 
           {catProducts.length > 0 ? (
             catProducts.map((product) => (
               <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
@@ -195,17 +165,11 @@ const CategoryPage = ({ user, onLogout }) => {
                     <p className="product-price">{product.price} ₸</p>
                   </div>
 
-                  <Button
-                    block
-                    onClick={() => handleAddToCart(product)}
-                    style={{ marginBottom: 8 }}
-                  >
-                    🛒 В корзину
-                  </Button>
-
+                
                   <Button
                     block
                     onClick={() => handleAddToFavorites(product)}
+                    className="favorite-btn"
                   >
                     ❤️ В избранное
                   </Button>

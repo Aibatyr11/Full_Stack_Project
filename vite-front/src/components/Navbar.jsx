@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Row, Col } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { fetchCategories } from "../api";
 
 const Navbar = ({ user, onLogout }) => {
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories().then(setCategories).catch(console.error);
+  }, []);
 
   const handleSearch = (value) => {
     if (value.trim()) {
@@ -13,16 +19,16 @@ const Navbar = ({ user, onLogout }) => {
   };
 
   return (
-    <div style={{ borderBottom: "1px solid #eee", marginBottom: 20 }}>
+    <div style={{ borderBottom: "1px solid #e5e5e5", marginBottom: 20, boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
       {/* Верхняя линия */}
       <div
         style={{
-          background: "#d2ebf5ff",
-          padding: "5px 40px",
-          fontSize: 12,
+          background: "#f5f7fa",
+          padding: "6px 40px",
+          fontSize: 13,
           display: "flex",
           justifyContent: "space-between",
-          color: "#555",
+          color: "#666",
         }}
       >
         <span>+7 777 777 77 77 · Доставка и оплата · Пункты выдачи</span>
@@ -38,18 +44,19 @@ const Navbar = ({ user, onLogout }) => {
       >
         <Col flex="auto" style={{ textAlign: "center" }}>
           <Input.Search
-            placeholder="Поиск"
+            placeholder="Поиск товаров..."
             style={{ maxWidth: 400 }}
+            allowClear
             onSearch={handleSearch}
           />
         </Col>
 
         <Col flex="200px" style={{ textAlign: "right" }}>
-          <Link to="/profile" style={{ marginRight: 20 }}>
-            <UserOutlined style={{ fontSize: 20 }} />
+          <Link to="/profile" style={{ marginRight: 20, color: "#333" }}>
+            <UserOutlined style={{ fontSize: 22 }} />
           </Link>
-          <Link to="/cart">
-            <ShoppingCartOutlined style={{ fontSize: 20 }} />
+          <Link to="/cart" style={{ color: "#333" }}>
+            <ShoppingCartOutlined style={{ fontSize: 22 }} />
           </Link>
         </Col>
       </Row>
@@ -57,18 +64,31 @@ const Navbar = ({ user, onLogout }) => {
       {/* Меню */}
       <div
         style={{
-          background: "#b0d7f0ff",
-          padding: "10px 40px",
+          background: "#1976d2",
+          padding: "12px 40px",
           display: "flex",
           gap: 20,
           color: "#fff",
           fontWeight: 500,
+          flexWrap: "wrap",
         }}
       >
-        <Link to="/" style={{ color: "#fff" }}>Каталог</Link>
-        <span>О компании</span>
-        <span>Оплата</span>
-        <span style={{ marginLeft: "auto" }} onClick={onLogout}>Выйти</span>
+        <Link to="/" style={{ color: "#fff", transition: "0.3s" }}>Каталог</Link>
+
+        {categories.slice(0, 6).map((cat) => (
+          <Link
+            key={cat.id}
+            to={`/category/${cat.id}`}
+            style={{
+              color: "#fff",
+              transition: "0.3s",
+            }}
+          >
+            {cat.name}
+          </Link>
+        ))}
+
+        
       </div>
     </div>
   );

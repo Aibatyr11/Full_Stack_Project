@@ -1,8 +1,8 @@
 // src/pages/ProductPage.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Button, message, notification } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Button, message, notification, Spin } from "antd";
+import { ShoppingCartOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import Navbar from "../components/Navbar";
 import { fetchProductById, fetchProductOffers, addToCart } from "../api";
 import "./ProductPage.css";
@@ -11,8 +11,6 @@ const ProductPage = ({ user, onLogout }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // ✅ Ant Design v5 — нужно через useNotification()
   const [api, contextHolder] = notification.useNotification();
 
   useEffect(() => {
@@ -39,11 +37,9 @@ const ProductPage = ({ user, onLogout }) => {
     }
     try {
       await addToCart(offer.offer_id, 1);
-
-      // ✅ красивое уведомление
       api.success({
-        message: "Товар добавлен в корзину 🛒",
-        description: `${product.name} (${offer.store_name}) успешно добавлен.`,
+        message: "Товар добавлен 🛒",
+        description: `${product.name} (${offer.store_name}) успешно добавлен в корзину.`,
         placement: "bottomRight",
         icon: <ShoppingCartOutlined style={{ color: "#52c41a" }} />,
         duration: 3.5,
@@ -65,7 +61,10 @@ const ProductPage = ({ user, onLogout }) => {
     return (
       <div>
         <Navbar user={user} onLogout={onLogout} />
-        <p className="not-found">Загрузка...</p>
+        <div className="loading-container">
+          <Spin size="large" />
+          <p>Загрузка товара...</p>
+        </div>
       </div>
     );
   }
@@ -81,12 +80,10 @@ const ProductPage = ({ user, onLogout }) => {
 
   return (
     <div>
-      {/* нужно вставить contextHolder */}
       {contextHolder}
       <Navbar user={user} onLogout={onLogout} />
       <div className="page-wrapper">
         <div className="product-card">
-          {/* фото + инфо */}
           <div className="product-header">
             <div className="product-image">
               <img src={product.image} alt={product.name} />
@@ -97,13 +94,11 @@ const ProductPage = ({ user, onLogout }) => {
             </div>
           </div>
 
-          {/* описание */}
           <div className="product-description">
             <h3>Описание</h3>
             <p>{product.description || "Описание скоро появится..."}</p>
           </div>
 
-          {/* видео */}
           {product.youtube_link && (
             <div>
               <h3>Видеообзор</h3>
@@ -117,7 +112,6 @@ const ProductPage = ({ user, onLogout }) => {
             </div>
           )}
 
-          {/* таблица офферов */}
           <h3 style={{ marginTop: "30px" }}>Цены в магазинах</h3>
           <div className="offers">
             <table>
@@ -141,15 +135,17 @@ const ProductPage = ({ user, onLogout }) => {
                       )}
                     </td>
                     <td>{o.price} ₸</td>
-                    <td>{o.stock > 0 ? "в наличии" : "нет"}</td>
+                    <td>{o.stock > 0 ? "В наличии" : "Нет"}</td>
                     <td>
                       {o.stock > 0 && (
                         <Button
                           type="primary"
-                          size="small"
+                          size="middle"
+                          shape="round"
                           onClick={() => handleAddToCart(o)}
+                          icon={<ShoppingCartOutlined />}
                         >
-                          В корзину 🛒
+                          В корзину
                         </Button>
                       )}
                     </td>
@@ -159,9 +155,11 @@ const ProductPage = ({ user, onLogout }) => {
             </table>
           </div>
 
-          {/* кнопка назад */}
-          <Link to="/" style={{ display: "inline-block", marginTop: 20 }}>
-            ← Назад
+          <Link
+            to="/"
+            className="back-link"
+          >
+            <ArrowLeftOutlined /> Назад
           </Link>
         </div>
       </div>

@@ -15,3 +15,25 @@ exports.findUserByUsername = (username, callback) => {
 exports.findUserById = (id, callback) => {
   db.get('SELECT * FROM users WHERE id = ?', [id], callback);
 };
+
+
+exports.updateUser = (id, data, callback) => {
+  const { username, email, description, avatar } = data;
+  db.run(
+    `UPDATE users 
+     SET username = COALESCE(?, username), 
+         email = COALESCE(?, email), 
+         description = COALESCE(?, description), 
+         avatar = COALESCE(?, avatar) 
+     WHERE id = ?`,
+    [username, email, description, avatar, id],
+    function (err) {
+      if (err) return callback(err);
+
+      db.get(`SELECT id, username, email, description, avatar FROM users WHERE id = ?`, [id], (err, user) => {
+        if (err) return callback(err);
+        callback(null, user);
+      });
+    }
+  );
+};
