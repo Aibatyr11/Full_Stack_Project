@@ -35,18 +35,15 @@
 git clone (https://github.com/Aibatyr11/Full_Stack_Project.git)
 cd project-name
 
-
 2. Установка зависимостей
 Backend
 
 cd express-server
 npm install
 
-
 Frontend
 cd ../vite-front
 npm install
-
 
 3. Запуск проекта
 Backend (Express + SQLite)
@@ -61,7 +58,6 @@ cd vite-front
 npm run dev
 
 Фронтенд будет доступен на: http://localhost:5173
-
 
 Настройки базы данных
 
@@ -87,7 +83,6 @@ express-server/db.js
 Собрать фронтенд:
 cd vite-front
 npm run build
-
 
 Готовые файлы будут в папке vite-front/dist/
 
