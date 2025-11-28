@@ -1,43 +1,43 @@
 import React from 'react';
-import { Card, Row, Col, Button } from 'antd';
+import { Row, Col, Button } from 'antd';
 import { Link } from 'react-router-dom';
-
-const { Meta } = Card;
+import './ProductGrid.css'; // отдельные стили
 
 const ProductGrid = ({ products, onAddToCart }) => {
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[24, 24]}>
       {products.map((product) => (
-        <Col key={product.id} xs={24} sm={12} md={8}>
-          <Card
-            hoverable
-            cover={
-              <Link to={`/product/${product.id}`}>
+        <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
+          <div className="product-card">
+            {/* Фото */}
+            <Link to={`/product/${product.id}`}>
+              <div className="product-image-container">
                 <img
-                  alt={product.name}
                   src={product.image || 'https://via.placeholder.com/240x160?text=No+Image'}
-                  style={{
-                    height: 200,
-                    width: '100%',
-                    objectFit: 'contain',
-                    backgroundColor: '#fff',
-                    transition: 'transform 0.3s ease'
-                  }}
+                  alt={product.name}
                   className="product-image"
                 />
-              </Link>
-            }
-            actions={[
-              <Button type="primary" onClick={() => onAddToCart(product)}>
-                Добавить в корзину
-              </Button>,
-            ]}
-          >
-            <Meta
-              title={<Link to={`/product/${product.id}`}>{product.name}</Link>}
-              description={`Цена: ${product.price} ₸`}
-            />
-          </Card>
+              </div>
+            </Link>
+
+            {/* Текст */}
+            <div className="product-info">
+              <h3 className="product-title">
+                <Link to={`/product/${product.id}`}>{product.name}</Link>
+              </h3>
+              <p className="product-price">{product.price} ₸</p>
+            </div>
+
+            {/* Кнопка */}
+            <Button
+              block
+              type="primary"
+              className="add-to-cart-btn"
+              onClick={() => onAddToCart(product)}
+            >
+              В корзину
+            </Button>
+          </div>
         </Col>
       ))}
     </Row>
