@@ -16,7 +16,6 @@
 Проект поддерживает авторизацию, регистрацию, работу с каталогом товаров, корзину и поиск.  
 
 ---
-
 ## ⚙️ Стек технологий
 - **Frontend**: React, Vite, Ant Design, React Router  
 - **Backend**: Node.js, Express.js  
